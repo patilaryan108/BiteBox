@@ -1,88 +1,81 @@
 import React from 'react';
+import { UtensilsCrossed } from 'lucide-react';
 
 function Footer() {
-    return (
-        <footer className="bb-footer">
-            <div className="bb-footer__grid">
-                {/* Brand column */}
-                <div>
-                    <div className="bb-footer__logo">BITEBOX</div>
-                    <p className="bb-footer__desc">
-                        Fresh, flavourful Indian meals crafted daily with farm-fresh ingredients
-                        and delivered hot to your doorstep. Taste the difference, every single day.
-                    </p>
-                    <div className="bb-footer__socials">
-                        <a href="https://instagram.com" className="bb-footer__social" aria-label="Instagram" target="_blank" rel="noreferrer">
-                            <i className="fa-brands fa-instagram"></i>
-                        </a>
-                        <a href="https://facebook.com" className="bb-footer__social" aria-label="Facebook" target="_blank" rel="noreferrer">
-                            <i className="fa-brands fa-facebook-f"></i>
-                        </a>
-                        <a href="https://x.com" className="bb-footer__social" aria-label="Twitter" target="_blank" rel="noreferrer">
-                            <i className="fa-brands fa-x-twitter"></i>
-                        </a>
-                        <a href="https://youtube.com" className="bb-footer__social" aria-label="YouTube" target="_blank" rel="noreferrer">
-                            <i className="fa-brands fa-youtube"></i>
-                        </a>
-                    </div>
-                </div>
+  return (
+    <footer className="bb-footer-section">
+      <div className="bb-footer-container">
+        <div className="bb-footer-grid">
 
-                {/* Quick Links */}
-                <div>
-                    <div className="bb-footer__col-title">Quick Links</div>
-                    <ul className="bb-footer__links">
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#lunch">Lunch Menu</a></li>
-                        <li><a href="#dairy">Dairy Products</a></li>
-                        <li><a href="#veggies">Vegetables</a></li>
-                    </ul>
-                </div>
-
-                {/* Categories */}
-                <div>
-                    <div className="bb-footer__col-title">Categories</div>
-                    <ul className="bb-footer__links">
-                        <li><a href="#lunch">Thali Meals</a></li>
-                        <li><a href="#lunch">Poori & Sabzi</a></li>
-                        <li><a href="#dairy">Fresh Milk</a></li>
-                        <li><a href="#dairy">Paneer & Curd</a></li>
-                        <li><a href="#veggies">Organic Veggies</a></li>
-                    </ul>
-                </div>
-
-                {/* Contact */}
-                <div>
-                    <div className="bb-footer__col-title">Contact Us</div>
-                    <div className="bb-footer__contact-item">
-                        <i className="fa-solid fa-location-dot"></i>
-                        <span>123 Main Street, Anytown,<br />Maharashtra, India</span>
-                    </div>
-                    <div className="bb-footer__contact-item">
-                        <i className="fa-solid fa-phone"></i>
-                        <span>+91 98675 96590</span>
-                    </div>
-                    <div className="bb-footer__contact-item">
-                        <i className="fa-solid fa-envelope"></i>
-                        <span>aspatil1081@gmail.com</span>
-                    </div>
-                    <div className="bb-footer__contact-item">
-                        <i className="fa-solid fa-clock"></i>
-                        <span>Mon – Sat: 8:00 AM – 9:00 PM</span>
-                    </div>
-                </div>
+          {/* Company */}
+          <div className="bb-footer-col">
+            <div className="bb-footer-brand">
+              <UtensilsCrossed size={20} color="#D97706" />
+              <span className="bb-footer-logo">BiteBox</span>
             </div>
+            <p className="bb-footer-tagline">
+              Premium food delivery, curated from the best local restaurants right to your door.
+            </p>
+          </div>
 
-            <div className="bb-footer__bottom">
-                <p className="bb-footer__copy">
-                    &copy; 2025 <span>BiteBox</span>. All rights reserved. Made with ❤️ by Aryan
-                </p>
-                <p className="bb-footer__copy">
-                    Privacy Policy · Terms of Service
-                </p>
+          {/* Company Links */}
+          <div className="bb-footer-col">
+            <h4 className="bb-footer-heading">Company</h4>
+            <ul className="bb-footer-list">
+              <li><a href="#hero" className="bb-footer-link">About Us</a></li>
+              <li><a href="#dishes" className="bb-footer-link">Our Menu</a></li>
+              <li><a href="#about" className="bb-footer-link">Features</a></li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div className="bb-footer-col">
+            <h4 className="bb-footer-heading">Support</h4>
+            <ul className="bb-footer-list">
+              <li><a href="#reviews" className="bb-footer-link">Contact</a></li>
+              <li><a href="#" className="bb-footer-link">Privacy Policy</a></li>
+              <li><a href="#" className="bb-footer-link">Help Center</a></li>
+            </ul>
+          </div>
+
+          {/* Legal / Social */}
+          <div className="bb-footer-col">
+            <h4 className="bb-footer-heading">Join Us</h4>
+            <div className="bb-footer-socials">
+              {/* Facebook */}
+              <a href="https://facebook.com" className="bb-footer-social-icon" aria-label="Facebook" target="_blank" rel="noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                </svg>
+              </a>
+              {/* Instagram */}
+              <a href="https://instagram.com" className="bb-footer-social-icon" aria-label="Instagram" target="_blank" rel="noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              {/* LinkedIn */}
+              <a href="https://linkedin.com" className="bb-footer-social-icon" aria-label="LinkedIn" target="_blank" rel="noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
+              {/* TikTok */}
+              <a href="https://tiktok.com" className="bb-footer-social-icon" aria-label="TikTok" target="_blank" rel="noreferrer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.87a8.18 8.18 0 004.78 1.52V6.93a4.85 4.85 0 01-1.01-.24z"/>
+                </svg>
+              </a>
             </div>
-        </footer>
-    );
+          </div>
+        </div>
+
+        <div className="bb-footer-bottom">
+          <p className="bb-footer-copyright">© 2025 BiteBox. All rights reserved. Made with ❤️ by Aryan</p>
+        </div>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;

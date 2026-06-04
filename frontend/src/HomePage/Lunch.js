@@ -1,122 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Utensils, 
-  Store, 
-  Carrot, 
-  Leaf, 
-  Cookie, 
-  Ban, 
-  Flame,
-  ArrowRight
-} from 'lucide-react';
+import React from 'react';
+import { Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-// Shown only if admin hasn't featured any items yet
-const fallbackItems = [
-    { img: 'media/lunch1.png', name: 'Poori Bhaji',     price: '₹60',  shopName: 'Sunrise Budget Hotel', shopId: '' },
-    { img: 'media/lunch2.png', name: 'Marathi Thali',   price: '₹120', shopName: 'The Grand Hotel',       shopId: '' },
-    { img: 'media/lunch3.png', name: 'Kokani Thali',    price: '₹150', shopName: 'Sunrise Budget Hotel',  shopId: '' },
-    { img: 'media/lunch4.png', name: 'Dal Khichdi',     price: '₹80',  shopName: 'The Grand Hotel',       shopId: '' },
-    { img: 'media/lunch5.png', name: 'Chicken Biryani', price: '₹180', shopName: 'Luxury Palace Hotel',   shopId: '' },
+const dishes = [
+  {
+    img: '/media/signature_ramen.png',
+    name: 'Signature Ramen',
+    restaurant: 'Tokyo Kitchen',
+    stars: 4.8,
+    price: '$22.50',
+    query: 'Ramen',
+  },
+  {
+    img: '/media/avocado_toast.png',
+    name: 'Avocado Toast',
+    restaurant: 'The Green Bistro',
+    stars: 4.8,
+    price: '$22.50',
+    query: 'Avocado Toast',
+  },
+  {
+    img: '/media/truffle_pasta.png',
+    name: 'Truffle Pasta',
+    restaurant: 'Bella Italia',
+    stars: 4.8,
+    price: '$22.50',
+    query: 'Truffle Pasta',
+  },
+  {
+    img: '/media/artisan_burger.png',
+    name: 'Artisan Burger',
+    restaurant: 'The Grill House',
+    stars: 4.8,
+    price: '$22.50',
+    query: 'Burger',
+  },
 ];
 
-const tags = [
-    { icon: <Carrot size={16} />,     label: 'Tastes Great'       },
-    { icon: <Leaf size={16} />,       label: 'Nature Fresh'       },
-    { icon: <Cookie size={16} />,     label: 'Healthy Snack'      },
-    { icon: <Ban size={16} />,        label: 'Non-GMO'            },
-    { icon: <Leaf size={16} />,       label: 'Rich Antioxidants'  },
-    { icon: <Flame size={16} />,      label: 'Hot & Fresh'        },
-];
+function StarRating({ rating }) {
+  return (
+    <div className="bb-dish-stars">
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star
+          key={i}
+          size={13}
+          fill={i <= Math.round(rating) ? '#D97706' : 'none'}
+          stroke={i <= Math.round(rating) ? '#D97706' : '#C4B8AD'}
+        />
+      ))}
+      <span style={{ marginLeft: 4, color: '#9C8E84', fontSize: '0.75rem' }}>{rating}</span>
+    </div>
+  );
+}
 
 function Lunch() {
-    const [lunchItems, setLunchItems] = useState(fallbackItems);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        // Fetch ALL admin-featured items via the dedicated endpoint
-        fetch('http://localhost:3001/api/restaurants/featured/all')
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    const featured = data.data;
-                    if (featured.length > 0) {
-                        setLunchItems(featured.map(m => ({
-                            img:      m.image || 'media/lunch1.png',
-                            name:     m.name,
-                            price:    '₹' + m.price,
-                            shopName: m.shopName,
-                            shopId:   m.shopId,
-                        })));
-                    }
-                }
-            })
-            .catch(err => console.error('Error fetching featured items:', err));
-    }, []);
+  return (
+    <section className="bb-dishes-section" id="dishes">
+      <div className="bb-dishes-container">
+        <div className="bb-dishes-header">
+          <div>
+            <p className="bb-dishes-subtitle">Chef's Selection</p>
+            <h2 className="bb-dishes-title">Most Loved Dishes Nearby</h2>
+          </div>
+          <a href="/search" className="bb-dishes-view-all">View All →</a>
+        </div>
 
-    // Triplicate for seamless infinite marquee
-    const scrollItems = [...lunchItems, ...lunchItems, ...lunchItems];
-    const scrollTags  = [...tags, ...tags, ...tags];
-
-    return (
-        <section className="bb-lunch" id="lunch">
-            <div className="bb-lunch__header">
-                <div className="bb-section-badge">
-                    <Utensils size={14} />
-                    Chef's Special
+        <div className="bb-dishes-grid">
+          {dishes.map((dish, i) => (
+            <div className="bb-dish-card" key={i}>
+              <div className="bb-dish-img-wrap">
+                <img src={dish.img} alt={dish.name} className="bb-dish-img" />
+              </div>
+              <div className="bb-dish-body">
+                <h3 className="bb-dish-name">{dish.name}</h3>
+                <p className="bb-dish-restaurant">{dish.restaurant}</p>
+                <div className="bb-dish-meta">
+                  <StarRating rating={dish.stars} />
+                  <span className="bb-dish-price">{dish.price}</span>
                 </div>
-                <h2 className="bb-section-title">
-                    Popular Dishes
-                </h2>
-                <p className="bb-section-desc">
-                    Hearty, delicious meals crafted fresh by local chefs.
-                    Experience the signature flavors of nearby restaurants.
-                </p>
+                <button
+                  className="bb-dish-btn"
+                  onClick={() => navigate(`/search?query=${encodeURIComponent(dish.query)}`)}
+                >
+                  View Details
+                </button>
+              </div>
             </div>
-
-            {/* Food cards marquee */}
-            <div className="marquee-container">
-                <div className="marquee-content">
-                    {scrollItems.map((item, i) => (
-                        <Link
-                            to={item.shopId ? `/restaurant/${item.shopId}` : '#'}
-                            className="bb-food-card"
-                            key={i}
-                        >
-                            <div className="bb-food-card__img-wrap">
-                                <img src={item.img} alt={item.name} className="bb-food-card__img" />
-                            </div>
-                            <div className="bb-food-card__name">{item.name}</div>
-                            <div className="flex items-center justify-between w-full mt-auto">
-                              <span className="bb-food-card__price">{item.price}</span>
-                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-white/40 uppercase tracking-tighter">
-                                <Store size={12} className="text-primary" />
-                                {item.shopName}
-                              </div>
-                            </div>
-                            
-                            <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between w-full text-white/60 text-xs font-semibold group-hover:text-white transition-colors">
-                              View Menu
-                              <ArrowRight size={14} className="transform group-hover:translate-x-1 transition-transform" />
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            </div>
-
-            {/* Tag strip - Using updated colors and spacing */}
-            <div className="bb-tag-strip">
-                <div className="bb-tag-strip__content">
-                    {scrollTags.map((t, i) => (
-                        <span className="bb-tag-strip__item" key={i}>
-                            {t.icon}
-                            {t.label}
-                            <span className="opacity-30">/</span>
-                        </span>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Lunch;

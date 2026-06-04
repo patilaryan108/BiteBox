@@ -1,23 +1,20 @@
 import React from 'react';
-
-import Navbar from '../Navbar';
 import Hero from './Hero';
-import Intro from './Intro'
-import Lunch from './Lunch'
-import Footer from '../Footer'
-import Customer from './Customer'
+import Lunch from './Lunch';
+import Intro from './Intro';
+import Customer from './Customer';
+import Footer from '../Footer';
 
 function Home() {
-    return (
-        <div className="container ">
-            <Navbar />
-            <Hero />
-            <Intro />
-            <Lunch />
-            <Customer />
-            <Footer />
-        </div>
-    );
+  return (
+    <div>
+      <Hero />
+      <Lunch />
+      <Intro />
+      <Customer />
+      <Footer />
+    </div>
+  );
 }
 
 export default Home;

@@ -1,88 +1,86 @@
 import React from 'react';
-
-const features = [
-    {
-        icon: 'fa-solid fa-fire',
-        title: 'Freshly Cooked',
-        desc: 'Every meal is prepared fresh on the same day — no preservatives, no shortcuts.',
-    },
-    {
-        icon: 'fa-solid fa-bowl-food',
-        title: 'Balanced Nutrition',
-        desc: 'Our chefs ensure every plate has the right balance of proteins, carbs and vitamins.',
-    },
-    {
-        icon: 'fa-solid fa-face-grin-hearts',
-        title: 'Customer Delight',
-        desc: 'We have served 5,000+ happy customers across Maharashtra with 4.9★ ratings.',
-    },
-    {
-        icon: 'fa-solid fa-mortar-pestle',
-        title: 'Authentic Recipes',
-        desc: 'Traditional recipes passed down through generations, cooked with pure desi ghee.',
-    },
-];
+import { Leaf, ChefHat, MapPin, Award } from 'lucide-react';
 
 function Intro() {
-    return (
-        <section className="bb-intro" id="about">
-            <div className="bb-intro__grid">
-                {/* Left features */}
-                <div>
-                    {features.slice(0, 2).map((f, i) => (
-                        <div className="bb-feature-card" key={i}>
-                            <div className="bb-feature-card__icon">
-                                <i className={f.icon}></i>
-                            </div>
-                            <div>
-                                <div className="bb-feature-card__title">{f.title}</div>
-                                <div className="bb-feature-card__desc">{f.desc}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+  return (
+    <section className="bb-features-section" id="about">
+      <div className="bb-features-container">
+        <h2 className="bb-features-title">Why BiteBox?</h2>
 
-                {/* Center image */}
-                <div className="bb-intro__img-wrap">
-                    <img src="media/intro.png" alt="Fresh Food Bowl" className="bb-intro__img" />
-                    <div className="bb-intro__img-badge">
-                        <i className="fa-solid fa-leaf"></i>
-                        <span>100% Farm<br />Fresh</span>
-                    </div>
-                </div>
+        <div className="bb-features-visual-wrap">
+          {/* SVG Connecting Lines */}
+          <svg
+            className="bb-features-svg-lines"
+            viewBox="0 0 1000 500"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Left Top (Fresh Ingredients) → burger center */}
+            <path d="M 270 145 L 390 230" className="bb-features-line" />
+            {/* Left Bottom (Curated Menu) → burger center */}
+            <path d="M 270 355 L 390 270" className="bb-features-line" />
+            {/* Right Top (Local Favorites) → burger center */}
+            <path d="M 730 145 L 610 230" className="bb-features-line" />
+            {/* Right Bottom (Premium Quality) → burger center */}
+            <path d="M 730 355 L 610 270" className="bb-features-line" />
+          </svg>
 
-                {/* Right features */}
-                <div>
-                    {features.slice(2).map((f, i) => (
-                        <div className="bb-feature-card" key={i}>
-                            <div className="bb-feature-card__icon">
-                                <i className={f.icon}></i>
-                            </div>
-                            <div>
-                                <div className="bb-feature-card__title">{f.title}</div>
-                                <div className="bb-feature-card__desc">{f.desc}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+          {/* Left Column */}
+          <div className="bb-features-side-col left-side">
+            <div className="bb-feature-item-label">
+              <div className="bb-feature-icon-circle">
+                <Leaf size={20} color="#D97706" />
+              </div>
+              <div className="bb-feature-text-block">
+                <span className="bb-feature-item-title">FRESH INGREDIENTS</span>
+                <p className="bb-feature-item-desc">Farm-to-table sourcing daily</p>
+              </div>
             </div>
-
-            {/* Heading below grid */}
-            <div className="bb-intro__heading">
-                <div className="bb-section-badge bb-intro__badge">
-                    <i className="fa-solid fa-seedling"></i>
-                    Green Living
-                </div>
-                <h2 className="bb-section-title bb-intro__title">
-                    Nurture Your Body with<br />Farm-Fresh Goodness
-                </h2>
-                <p className="bb-section-desc bb-intro__desc">
-                    We partner with local farmers to bring you the freshest produce
-                    and cook every meal with love and tradition.
-                </p>
+            <div className="bb-feature-item-label">
+              <div className="bb-feature-icon-circle">
+                <ChefHat size={20} color="#D97706" />
+              </div>
+              <div className="bb-feature-text-block">
+                <span className="bb-feature-item-title">CURATED MENU</span>
+                <p className="bb-feature-item-desc">Expert-curated selections</p>
+              </div>
             </div>
-        </section>
-    );
+          </div>
+
+          {/* Central Burger */}
+          <div className="bb-features-center-burger">
+            <img
+              src="/media/burger_why.png"
+              alt="Stacked Artisan Burger"
+              className="bb-features-burger-img"
+            />
+          </div>
+
+          {/* Right Column */}
+          <div className="bb-features-side-col right-side">
+            <div className="bb-feature-item-label">
+              <div className="bb-feature-icon-circle">
+                <MapPin size={20} color="#D97706" />
+              </div>
+              <div className="bb-feature-text-block">
+                <span className="bb-feature-item-title">LOCAL FAVORITES</span>
+                <p className="bb-feature-item-desc">Support neighborhood chefs</p>
+              </div>
+            </div>
+            <div className="bb-feature-item-label">
+              <div className="bb-feature-icon-circle">
+                <Award size={20} color="#D97706" />
+              </div>
+              <div className="bb-feature-text-block">
+                <span className="bb-feature-item-title">PREMIUM QUALITY</span>
+                <p className="bb-feature-item-desc">Top-rated, verified restaurants</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export default Intro;
