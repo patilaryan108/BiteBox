@@ -3,11 +3,6 @@ const mongoose = require("mongoose");
 const menuItemSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   price: { type: Number, required: true, min: 0 },
-  type: {
-    type: String,
-    enum: ["breakfast", "lunch", "dinner", "vegetable", "fruit", "dairy", "snack", "other"],
-    default: "other",
-  },
   description: { type: String, default: "", trim: true },
   image: { type: String, default: "" }, // URL or base64 image
   featured: { type: Boolean, default: false }, // show on homepage hero sections
@@ -23,16 +18,11 @@ const restaurantSchema = new mongoose.Schema(
     },
     // Legacy string items — kept for backward-compat & text search
     items: { type: [String], default: [] },
-    // Rich menu items (with price, type, description)
+    // Rich menu items (with price, description)
     menu: { type: [menuItemSchema], default: [] },
     priceRange: { type: Number, required: true },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     isOpen: { type: Boolean, default: true },
-    mealType: {
-      type: [String],
-      enum: ["breakfast", "lunch", "dinner", "vegetable", "fruit", "dairy"],
-      default: [],
-    },
     type: { type: String, enum: ["veg", "non-veg", "both"], default: "both" },
     reviews: [
       {

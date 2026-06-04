@@ -11,7 +11,6 @@ const customShops = [
     priceRange: 150,
     rating: 4.6,
     isOpen: true,
-    mealType: ["breakfast", "lunch", "dinner"],
     type: "veg"
   },
   {
@@ -22,7 +21,6 @@ const customShops = [
     priceRange: 250,
     rating: 4.8,
     isOpen: true,
-    mealType: ["breakfast", "lunch"],
     type: "both"
   },
   {
@@ -33,7 +31,6 @@ const customShops = [
     priceRange: 400,
     rating: 4.7,
     isOpen: true,
-    mealType: ["lunch", "dinner"],
     type: "non-veg"
   }
 ];

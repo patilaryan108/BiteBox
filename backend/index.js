@@ -389,7 +389,6 @@ mongoose.connect(uri)
                     priceRange: 800,
                     rating: 4.5,
                     isOpen: true,
-                    mealType: ["lunch", "dinner"],
                     type: "both",
                 },
                 {
@@ -400,7 +399,6 @@ mongoose.connect(uri)
                     priceRange: 200,
                     rating: 4.2,
                     isOpen: true,
-                    mealType: ["breakfast", "lunch"],
                     type: "veg",
                 },
                 {
@@ -411,7 +409,6 @@ mongoose.connect(uri)
                     priceRange: 3000,
                     rating: 4.8,
                     isOpen: true,
-                    mealType: ["dinner"],
                     type: "non-veg",
                 }
             ];

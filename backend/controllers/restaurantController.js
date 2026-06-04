@@ -3,7 +3,7 @@ const Restaurant = require("../models/Restaurant");
 // ─── Search with geo ranking ───────────────────────────────────────────────
 exports.getRestaurants = async (req, res) => {
   try {
-    const { lat, lng, food, maxPrice, type, mealType, isOpen } = req.query;
+    const { lat, lng, food, maxPrice, type, isOpen } = req.query;
 
     if (!lat || !lng) {
       return res.status(400).json({ error: "lat and lng are required query parameters" });
@@ -23,7 +23,6 @@ exports.getRestaurants = async (req, res) => {
       ];
     }
     if (type) matchQuery.type = type;
-    if (mealType) matchQuery.mealType = mealType;
     if (isOpen !== undefined) matchQuery.isOpen = isOpen === "true";
     if (maxPrice) matchQuery.priceRange = { $lte: mPrice };
 
@@ -110,7 +109,7 @@ exports.deleteRestaurant = async (req, res) => {
 // ─── Add rich menu item (shopkeeper/admin) ────────────────────────────────
 exports.addMenuItemToRestaurant = async (req, res) => {
   try {
-    const { name, price, type, description, image } = req.body;
+    const { name, price, description, image } = req.body;
 
     if (!name || price === undefined) {
       return res.status(400).json({ success: false, error: "Item name and price are required" });
@@ -123,7 +122,6 @@ exports.addMenuItemToRestaurant = async (req, res) => {
           menu: {
             name,
             price: Number(price),
-            type: type || "other",
             description: description || "",
             image: image || "",
           },
