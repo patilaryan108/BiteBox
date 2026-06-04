@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function SignUp() {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'customer' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,9 +22,8 @@ export default function SignUp() {
     setLoading(true);
     try {
       const user = await signup(form.name, form.email, form.password, form.role);
-      if (user.role === 'admin') navigate('/admin');
-      else if (user.role === 'shopkeeper') navigate('/shopkeeper');
-      else navigate('/');
+      const from = location.state?.from || (user.role === 'admin' ? '/admin' : user.role === 'shopkeeper' ? '/shopkeeper' : '/');
+      navigate(from, { replace: true });
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message || 'Signup failed. Please try again.';
       setError(msg);
@@ -129,7 +129,7 @@ export default function SignUp() {
 
         <p className="auth-switch">
           Already have an account?{' '}
-          <Link to="/signin">Sign In</Link>
+          <Link to="/signin" state={{ from: location.state?.from }}>Sign In</Link>
         </p>
       </div>
     </div>

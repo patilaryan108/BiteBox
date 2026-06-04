@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function SignIn() {
   const { signin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,9 +18,8 @@ export default function SignIn() {
     setLoading(true);
     try {
       const user = await signin(form.email, form.password);
-      if (user.role === 'admin') navigate('/admin');
-      else if (user.role === 'shopkeeper') navigate('/shopkeeper');
-      else navigate('/');
+      const from = location.state?.from || (user.role === 'admin' ? '/admin' : user.role === 'shopkeeper' ? '/shopkeeper' : '/');
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Sign in failed. Check your credentials.');
     } finally {
@@ -94,7 +94,7 @@ export default function SignIn() {
 
         <p className="auth-switch">
           Don't have an account?{' '}
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/signup" state={{ from: location.state?.from }}>Sign Up</Link>
         </p>
       </div>
     </div>

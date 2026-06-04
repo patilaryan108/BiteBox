@@ -1,4 +1,5 @@
 import React from 'react';
+import { ShoppingBag, Play, Sparkles, Star } from 'lucide-react';
 
 function Hero() {
     return (
@@ -16,13 +17,13 @@ function Hero() {
             {/* Main Content */}
             <div className="bb-hero__content">
                 <div className="bb-hero__badge">
-                    <i className="fa-solid fa-star"></i>
+                    <Sparkles size={14} />
                     Fresh &amp; Authentic Indian Flavors
                 </div>
 
                 <h1 className="bb-hero__title">
                     Fuel Your Day
-                    <span className="highlight">with a Fresh,</span>
+                    <span>with a Fresh,</span>
                     Flavorful Platter
                 </h1>
 
@@ -31,40 +32,18 @@ function Hero() {
                     hot to your doorstep. Taste the difference, every single day.
                 </p>
 
-                <div className="bb-hero__actions">
-                    <a href="#lunch" className="bb-btn-primary">
-                        <i className="fa-solid fa-bag-shopping"></i>
-                        Order BiteBox
-                    </a>
-                    <a href="#about" className="bb-btn-ghost">
-                        <i className="fa-solid fa-play"></i>
-                        How It Works
-                    </a>
-                </div>
-                {/* Bottom stats */}
-                <div className="bb-hero__stats">
-                    <div className="bb-hero__stat">
-                        <div className="bb-hero__stat-num">5K+</div>
-                        <div className="bb-hero__stat-label">Happy Customers</div>
-                    </div>
-                    <div className="bb-hero__stat">
-                        <div className="bb-hero__stat-num">50+</div>
-                        <div className="bb-hero__stat-label">Dishes Daily</div>
-                    </div>
-                    <div className="bb-hero__stat">
-                        <div className="bb-hero__stat-num">4.9★</div>
-                        <div className="bb-hero__stat-label">Average Rating</div>
-                    </div>
-                </div>
+
+
+
             </div>
 
-            {/* Floating food image on right */}
+            {/* Floating food image on right
             <img
                 src="media/heroright.png"
                 alt="Delicious Biryani"
                 className="bb-hero__food-img"
-            />
-        </section>
+            /> */}
+        </section >
     );
 }
 

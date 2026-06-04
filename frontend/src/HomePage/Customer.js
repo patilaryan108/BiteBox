@@ -61,10 +61,10 @@ function Customer() {
                     <i className="fa-solid fa-star"></i>
                     Testimonials
                 </div>
-                <h2 className="bb-section-title bb-section-title--white">
+                <h2 className="bb-section-title bb-reviews__title">
                     What Our Customers Say
                 </h2>
-                <p className="bb-section-desc bb-section-desc--white" style={{ margin: '0 auto' }}>
+                <p className="bb-section-desc bb-reviews__desc" style={{ margin: '0 auto' }}>
                     Over 5,000 happy customers trust BiteBox for their daily meals.
                     Here's what they love about us.
                 </p>

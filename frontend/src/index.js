@@ -21,10 +21,20 @@ root.render(
         <Routes>
           {/* Public */}
           <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/restaurant/:id" element={<RestaurantDetail />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+
+          {/* Protected */}
+          <Route path="/search" element={
+            <ProtectedRoute>
+              <SearchResults />
+            </ProtectedRoute>
+          } />
+          <Route path="/restaurant/:id" element={
+            <ProtectedRoute>
+              <RestaurantDetail />
+            </ProtectedRoute>
+          } />
 
           {/* Admin only */}
           <Route path="/admin" element={

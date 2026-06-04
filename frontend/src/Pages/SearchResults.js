@@ -13,7 +13,6 @@ export default function SearchResults() {
   // Filters state
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    mealType: '',
     priceRange: 5000,
     preference: '',
     openNow: false
@@ -29,7 +28,6 @@ export default function SearchResults() {
       // Build query string
       let params = `?lat=${userLat}&lng=${userLng}`;
       if (searchQuery) params += `&food=${searchQuery}`;
-      if (filters.mealType) params += `&mealType=${filters.mealType}`;
       if (filters.preference) params += `&type=${filters.preference}`;
       if (filters.openNow) params += `&isOpen=true`;
       if (filters.priceRange) params += `&maxPrice=${filters.priceRange}`;
@@ -95,38 +93,7 @@ export default function SearchResults() {
         {/* Dropdown Filters Panel */}
         {showFilters && (
           <div className="bg-white p-6 rounded-2xl shadow-xl border border-neutral-100 animate-in fade-in slide-in-from-top-4 duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              
-              {/* Meal Type — multi-select chips */}
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-neutral-700 uppercase tracking-wider">Serves / Type</label>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { value: 'breakfast', label: '🌅 Breakfast' },
-                    { value: 'lunch',     label: '🍱 Lunch' },
-                    { value: 'dinner',    label: '🌙 Dinner' },
-                    { value: 'vegetable', label: '🥦 Vegetable' },
-                    { value: 'fruit',     label: '🍎 Fruit' },
-                    { value: 'dairy',     label: '🥛 Dairy' },
-                  ].map(m => {
-                    const active = filters.mealType === m.value;
-                    return (
-                      <button
-                        key={m.value}
-                        type="button"
-                        onClick={() => setFilters({ ...filters, mealType: active ? '' : m.value })}
-                        className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
-                          active
-                            ? 'bg-orange-500 text-white border-orange-500'
-                            : 'bg-neutral-50 text-neutral-600 border-neutral-200 hover:border-orange-400 hover:text-orange-500'
-                        }`}
-                      >
-                        {m.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
               {/* Preference */}
               <div className="space-y-2">
@@ -182,7 +149,7 @@ export default function SearchResults() {
             <div className="mt-6 flex justify-end">
               <button 
                 onClick={() => {
-                  setFilters({ mealType: '', priceRange: 5000, preference: '', openNow: false });
+                  setFilters({ priceRange: 5000, preference: '', openNow: false });
                   setSearchQuery('');
                 }}
                 className="text-sm font-bold text-neutral-500 hover:text-orange-600 transition-colors underline underline-offset-4"

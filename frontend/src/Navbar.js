@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { 
+  Search, 
+  User, 
+  Settings, 
+  Store, 
+  LogOut, 
+  ChevronDown, 
+  LayoutDashboard,
+  Utensils
+} from 'lucide-react';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -20,12 +30,6 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  const getRoleBadgeClass = (role) => {
-    if (role === 'admin') return 'navbar-role admin';
-    if (role === 'shopkeeper') return 'navbar-role shopkeeper';
-    return 'navbar-role customer';
-  };
-
   const getDashboardPath = (role) => {
     if (role === 'admin') return '/admin';
     if (role === 'shopkeeper') return '/shopkeeper';
@@ -33,95 +37,82 @@ function Navbar() {
   };
 
   return (
-    <nav className="bb-navbar" style={{ boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.5)' : 'none' }}>
+    <nav className={`bb-navbar ${scrolled ? 'bb-navbar--scrolled' : ''}`}>
       {/* Logo */}
-      <a href="/" className="bb-navbar__logo">
+      <Link to="/" className="bb-navbar__logo">
+        <Utensils size={24} />
         BITE<span>BOX</span>
-      </a>
+      </Link>
 
       {/* Nav Links */}
       <ul className="bb-navbar__links">
-        <li><a href="/">Home</a></li>
+        <li><Link to="/">Home</Link></li>
         <li><a href="#about">About</a></li>
         <li><a href="#lunch">Lunch</a></li>
         <li><a href="#dairy">Dairy</a></li>
         <li><a href="#veggies">Vegetables</a></li>
-        {user?.role === 'admin' && (
-          <li><Link to="/admin" className="navbar-dashboard-link">⚙️ Admin</Link></li>
-        )}
-        {user?.role === 'shopkeeper' && (
-          <li><Link to="/shopkeeper" className="navbar-dashboard-link">🏪 Dashboard</Link></li>
-        )}
       </ul>
 
-      {/* Right side: Search + Cart + Auth */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div
-          className="bb-navbar__search"
+      {/* Right side Actions */}
+      <div className="flex items-center gap-4">
+        {/* Search Trigger */}
+        <button 
+          className="p-2 text-white/70 hover:text-white transition-colors"
           onClick={() => navigate('/search')}
-          style={{ cursor: 'pointer' }}
         >
-          <i className="fa-solid fa-magnifying-glass"></i>
-          <input type="text" placeholder="Search dishes…" readOnly style={{ cursor: 'pointer' }} />
-        </div>
+          <Search size={22} />
+        </button>
 
         {user ? (
-          /* Logged-in user menu */
-          <div className="navbar-user-menu" style={{ position: 'relative' }}>
+          <div className="relative">
             <button
-              id="navbar-user-btn"
-              className="navbar-user-btn"
-              onClick={() => setMenuOpen(v => !v)}
+              className="flex items-center gap-2 py-1.5 px-3 bg-white/10 hover:bg-white/15 border border-white/10 rounded-full transition-all"
+              onClick={() => setMenuOpen(!menuOpen)}
             >
-              <span className="navbar-avatar">
-                {user.role === 'admin' ? '👑' : user.role === 'shopkeeper' ? '🏪' : '👤'}
+              <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center text-xs font-bold text-white shadow-lg">
+                {user.role === 'admin' ? <Settings size={14} /> : user.role === 'shopkeeper' ? <Store size={14} /> : <User size={14} />}
+              </div>
+              <span className="text-sm font-semibold text-white/90 hidden sm:block">
+                {user.name?.split(' ')[0]}
               </span>
-              <span className="navbar-username">{user.name?.split(' ')[0]}</span>
-              <span className={getRoleBadgeClass(user.role)}>{user.role}</span>
-              <span style={{ fontSize: '0.75rem' }}>▾</span>
+              <ChevronDown size={14} className={`text-white/50 transition-transform ${menuOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {menuOpen && (
-              <div className="navbar-dropdown">
-                <div className="navbar-dropdown-header">
-                  <strong>{user.name}</strong>
-                  <small>{user.email}</small>
+              <div className="absolute right-0 mt-3 w-64 bg-[#120801] border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div className="p-4 border-bottom border-white/5 bg-white/5">
+                  <p className="text-sm font-bold text-white uppercase tracking-wider">{user.role}</p>
+                  <p className="text-xs text-white/50 truncate">{user.email}</p>
                 </div>
-                {(user.role === 'admin' || user.role === 'shopkeeper') && (
+                
+                <div className="p-2">
+                  {(user.role === 'admin' || user.role === 'shopkeeper') && (
+                    <button
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-white/80 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+                      onClick={() => { navigate(getDashboardPath(user.role)); setMenuOpen(false); }}
+                    >
+                      <LayoutDashboard size={18} className="text-primary" />
+                      Dashboard
+                    </button>
+                  )}
                   <button
-                    id="navbar-dashboard-link"
-                    className="navbar-dropdown-item"
-                    onClick={() => { navigate(getDashboardPath(user.role)); setMenuOpen(false); }}
+                    className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl transition-all"
+                    onClick={handleLogout}
                   >
-                    {user.role === 'admin' ? '⚙️ Admin Dashboard' : '🏪 My Dashboard'}
+                    <LogOut size={18} />
+                    Logout
                   </button>
-                )}
-                <button
-                  id="navbar-logout-btn"
-                  className="navbar-dropdown-item logout"
-                  onClick={handleLogout}
-                >
-                  🚪 Logout
-                </button>
+                </div>
               </div>
             )}
           </div>
         ) : (
-          /* Not logged in */
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Link
-              id="navbar-signin-link"
-              to="/signin"
-              className="navbar-auth-btn signin"
-            >
+          <div className="flex gap-2">
+            <Link to="/signin" className="px-5 py-2 text-sm font-bold text-white hover:text-primary transition-colors">
               Sign In
             </Link>
-            <Link
-              id="navbar-signup-link"
-              to="/signup"
-              className="navbar-auth-btn signup"
-            >
-              Sign Up
+            <Link to="/signup" className="px-6 py-2 text-sm font-bold text-white bg-primary hover:bg-primary-light rounded-full shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95">
+              Get Started
             </Link>
           </div>
         )}

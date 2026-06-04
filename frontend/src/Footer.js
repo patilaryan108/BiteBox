@@ -12,16 +12,16 @@ function Footer() {
                         and delivered hot to your doorstep. Taste the difference, every single day.
                     </p>
                     <div className="bb-footer__socials">
-                        <a href="#" className="bb-footer__social" aria-label="Instagram">
+                        <a href="https://instagram.com" className="bb-footer__social" aria-label="Instagram" target="_blank" rel="noreferrer">
                             <i className="fa-brands fa-instagram"></i>
                         </a>
-                        <a href="#" className="bb-footer__social" aria-label="Facebook">
+                        <a href="https://facebook.com" className="bb-footer__social" aria-label="Facebook" target="_blank" rel="noreferrer">
                             <i className="fa-brands fa-facebook-f"></i>
                         </a>
-                        <a href="#" className="bb-footer__social" aria-label="Twitter">
+                        <a href="https://x.com" className="bb-footer__social" aria-label="Twitter" target="_blank" rel="noreferrer">
                             <i className="fa-brands fa-x-twitter"></i>
                         </a>
-                        <a href="#" className="bb-footer__social" aria-label="YouTube">
+                        <a href="https://youtube.com" className="bb-footer__social" aria-label="YouTube" target="_blank" rel="noreferrer">
                             <i className="fa-brands fa-youtube"></i>
                         </a>
                     </div>

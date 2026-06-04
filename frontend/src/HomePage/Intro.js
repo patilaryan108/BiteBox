@@ -68,15 +68,15 @@ function Intro() {
             </div>
 
             {/* Heading below grid */}
-            <div style={{ textAlign: 'center', marginTop: '60px' }}>
-                <div className="bb-section-badge">
+            <div className="bb-intro__heading">
+                <div className="bb-section-badge bb-intro__badge">
                     <i className="fa-solid fa-seedling"></i>
                     Green Living
                 </div>
-                <h2 className="bb-section-title" style={{ maxWidth: '560px', margin: '0 auto' }}>
+                <h2 className="bb-section-title bb-intro__title">
                     Nurture Your Body with<br />Farm-Fresh Goodness
                 </h2>
-                <p className="bb-section-desc" style={{ margin: '12px auto 0', textAlign: 'center' }}>
+                <p className="bb-section-desc bb-intro__desc">
                     We partner with local farmers to bring you the freshest produce
                     and cook every meal with love and tradition.
                 </p>

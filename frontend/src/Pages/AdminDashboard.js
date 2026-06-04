@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
   const [showAddHotel, setShowAddHotel] = useState(false);
   const [hotelForm, setHotelForm] = useState({
     name: '', address: '', priceRange: '', rating: '', type: 'both',
-    mealType: 'lunch', lat: '12.9716', lng: '77.5946',
+    lat: '12.9716', lng: '77.5946',
   });
   const [hotelLoading, setHotelLoading] = useState(false);
 
@@ -104,12 +104,6 @@ export default function AdminDashboard() {
     ? allItems
     : allItems.filter(i => i.type === showFilter);
 
-  const groupedItems = CATEGORIES.reduce((acc, cat) => {
-    const items = allItems.filter(i => i.type === cat.value);
-    if (items.length) acc[cat.value] = items;
-    return acc;
-  }, {});
-
   // ── Actions ──────────────────────────────────────────────────────────────
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this hotel permanently?')) return;
@@ -126,12 +120,12 @@ export default function AdminDashboard() {
       const payload = {
         name: hotelForm.name, address: hotelForm.address,
         priceRange: Number(hotelForm.priceRange), rating: Number(hotelForm.rating),
-        type: hotelForm.type, mealType: [hotelForm.mealType], isOpen: true,
+        type: hotelForm.type, isOpen: true,
         location: { type: 'Point', coordinates: [parseFloat(hotelForm.lng), parseFloat(hotelForm.lat)] },
       };
       await authAxios().post('/api/restaurants', payload);
       showToast('✅ Hotel added!');
-      setHotelForm({ name: '', address: '', priceRange: '', rating: '', type: 'both', mealType: 'lunch', lat: '12.9716', lng: '77.5946' });
+      setHotelForm({ name: '', address: '', priceRange: '', rating: '', type: 'both', lat: '12.9716', lng: '77.5946' });
       setShowAddHotel(false);
       fetchRestaurants();
     } catch (e) { showToast('❌ ' + (e.response?.data?.error || 'Failed.'), true); }
@@ -152,12 +146,11 @@ export default function AdminDashboard() {
 
   const handleAddItem = async (restaurantId) => {
     const name  = itemInputs[restaurantId]?.trim();
-    const type  = itemTypes[restaurantId]  || 'lunch';
     const price = itemPrices[restaurantId] || '100';
     const image = itemImages[restaurantId] || '';
     if (!name) return;
     try {
-      await authAxios().post(`/api/restaurants/${restaurantId}/menu`, { name, price: Number(price), type, image });
+      await authAxios().post(`/api/restaurants/${restaurantId}/menu`, { name, price: Number(price), image });
       showToast(`✅ "${name}" added!`);
       setItemInputs(p => ({ ...p, [restaurantId]: '' }));
       setItemPrices(p => ({ ...p, [restaurantId]: '' }));
@@ -274,31 +267,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Category filter tabs */}
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
-              <button
-                onClick={() => setShowFilter('all')}
-                style={{
-                  padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer',
-                  background: showFilter === 'all' ? '#f1c40f' : 'rgba(255,255,255,0.08)',
-                  color: showFilter === 'all' ? '#000' : 'inherit', fontWeight: 600, fontSize: '0.85rem',
-                }}
-              >All Items ({allItems.length})</button>
-              {CATEGORIES.map(cat => {
-                const count = allItems.filter(i => i.type === cat.value).length;
-                if (!count) return null;
-                const active = showFilter === cat.value;
-                return (
-                  <button key={cat.value}
-                    onClick={() => setShowFilter(cat.value)}
-                    style={{
-                      padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer',
-                      background: active ? cat.color : 'rgba(255,255,255,0.08)',
-                      color: active ? '#fff' : 'inherit', fontWeight: 600, fontSize: '0.85rem',
-                    }}
-                  >{cat.icon} {cat.label} ({count})</button>
-                );
-              })}
-            </div>
+            <div style={{ marginBottom: 12 }}></div>
 
             {/* Items grid or empty */}
             {loading ? (
@@ -316,7 +285,7 @@ export default function AdminDashboard() {
                 gap: 16,
               }}>
                 {filteredItems.map(item => {
-                  const cat = catMap[item.type] || catMap['other'];
+                  const cat = catMap['other'];
                   const isFeatured = !!item.featured;
                   const isToggling = toggling[item._id];
                   return (
@@ -338,14 +307,8 @@ export default function AdminDashboard() {
                           <div style={{
                             height: '100%', display: 'flex', alignItems: 'center',
                             justifyContent: 'center', fontSize: 48,
-                          }}>{cat.icon}</div>
+                          }}>🍽️</div>
                         )}
-                        {/* Category badge */}
-                        <span style={{
-                          position: 'absolute', top: 10, left: 10,
-                          background: cat.color, color: '#fff',
-                          padding: '3px 10px', borderRadius: 20, fontSize: '0.72rem', fontWeight: 700,
-                        }}>{cat.icon} {cat.label}</span>
                         {/* Featured badge */}
                         {isFeatured && (
                           <span style={{
@@ -367,15 +330,7 @@ export default function AdminDashboard() {
                           <span style={{ fontSize: '0.78rem', opacity: 0.6 }}>🏪 {item.shopName}</span>
                         </div>
 
-                        {/* Homepage section label */}
-                        {HOME_SECTIONS[item.type] && (
-                          <div style={{
-                            fontSize: '0.75rem', opacity: 0.5,
-                            marginBottom: 10, fontStyle: 'italic',
-                          }}>
-                            📍 Appears in: {HOME_SECTIONS[item.type]}
-                          </div>
-                        )}
+
 
                         {/* Feature toggle button */}
                         <button
@@ -453,14 +408,6 @@ export default function AdminDashboard() {
                       <option value="veg">Veg</option>
                       <option value="non-veg">Non-Veg</option>
                       <option value="both">Both</option>
-                    </select>
-                  </div>
-                  <div className="auth-field">
-                    <label>Meal Type</label>
-                    <select value={hotelForm.mealType} onChange={e => setHotelForm({ ...hotelForm, mealType: e.target.value })}>
-                      <option value="breakfast">Breakfast</option>
-                      <option value="lunch">Lunch</option>
-                      <option value="dinner">Dinner</option>
                     </select>
                   </div>
                   <div className="auth-field">
@@ -554,11 +501,6 @@ export default function AdminDashboard() {
                           value={itemPrices[r._id] || ''}
                           onChange={e => setItemPrices(p => ({ ...p, [r._id]: e.target.value }))}
                           className="add-item-input" style={{ width: 80 }} />
-                        <select value={itemTypes[r._id] || 'lunch'}
-                          onChange={e => setItemTypes(p => ({ ...p, [r._id]: e.target.value }))}
-                          className="add-item-input">
-                          {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.icon} {c.label}</option>)}
-                        </select>
                         <button id={`admin-add-item-${r._id}`} className="add-item-btn"
                           onClick={() => handleAddItem(r._id)}>➕ Add</button>
                       </div>
@@ -602,14 +544,6 @@ export default function AdminDashboard() {
                     <option value="veg">Veg</option>
                     <option value="non-veg">Non-Veg</option>
                     <option value="both">Both</option>
-                  </select>
-                </div>
-                <div className="auth-field">
-                  <label>Meal Type</label>
-                  <select value={hotelForm.mealType} onChange={e => setHotelForm({ ...hotelForm, mealType: e.target.value })}>
-                    <option value="breakfast">Breakfast</option>
-                    <option value="lunch">Lunch</option>
-                    <option value="dinner">Dinner</option>
                   </select>
                 </div>
                 <div className="auth-field">

@@ -2,8 +2,6 @@ import React from 'react';
 
 import Navbar from '../Navbar';
 import Hero from './Hero';
-import Dairy from './Dairy';
-import Veg from './veg'
 import Intro from './Intro'
 import Lunch from './Lunch'
 import Footer from '../Footer'
@@ -16,8 +14,6 @@ function Home() {
             <Hero />
             <Intro />
             <Lunch />
-            <Dairy />
-            <Veg />
             <Customer />
             <Footer />
         </div>

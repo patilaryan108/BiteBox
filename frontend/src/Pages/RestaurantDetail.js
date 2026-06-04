@@ -4,8 +4,7 @@ import axios from 'axios';
 import { Star, MapPin, ArrowLeft, Clock, Utensils, IndianRupee } from 'lucide-react';
 
 const TYPE_ICONS = {
-  breakfast: '🌅', lunch: '🍱', dinner: '🌙',
-  vegetable: '🥦', fruit: '🍎', dairy: '🥛', snack: '🍿', other: '🍽️',
+  other: '🍽️',
 };
 
 export default function RestaurantDetail() {
@@ -50,13 +49,7 @@ export default function RestaurantDetail() {
   const menuItems = restaurant.menu && restaurant.menu.length > 0 ? restaurant.menu : null;
   const legacyItems = restaurant.items && restaurant.items.length > 0 ? restaurant.items : null;
 
-  const itemTypes = menuItems
-    ? ['all', ...new Set(menuItems.map(i => i.type))]
-    : ['all'];
-
-  const filteredMenu = menuItems
-    ? (activeFilter === 'all' ? menuItems : menuItems.filter(i => i.type === activeFilter))
-    : null;
+  const filteredMenu = menuItems;
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 font-sans">
@@ -104,11 +97,6 @@ export default function RestaurantDetail() {
 
         {/* Info chips */}
         <div className="flex flex-wrap gap-3 mb-8">
-          {(restaurant.mealType || []).map(m => (
-            <span key={m} className="bg-orange-50 text-orange-600 border border-orange-200 rounded-full px-4 py-1.5 text-sm font-semibold capitalize">
-              {TYPE_ICONS[m] || '🍽️'} {m}
-            </span>
-          ))}
           <span className={`rounded-full px-4 py-1.5 text-sm font-semibold ${restaurant.isOpen ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-red-50 text-red-500 border border-red-200'}`}>
             {restaurant.isOpen ? '🟢 Currently Open' : '🔴 Currently Closed'}
           </span>
@@ -124,21 +112,6 @@ export default function RestaurantDetail() {
 
               {filteredMenu ? (
                 <>
-                  {/* Category filter tabs */}
-                  {itemTypes.length > 1 && (
-                    <div className="detail-type-filters mb-5">
-                      {itemTypes.map(t => (
-                        <button
-                          key={t}
-                          className={`detail-type-chip${activeFilter === t ? ' active' : ''}`}
-                          onClick={() => setActiveFilter(t)}
-                        >
-                          {t !== 'all' && TYPE_ICONS[t]} {t.charAt(0).toUpperCase() + t.slice(1)}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {filteredMenu.map(item => (
                       <div key={item._id} className="detail-menu-card">
@@ -155,18 +128,17 @@ export default function RestaurantDetail() {
                               }}
                             />
                             <div className="detail-menu-icon" style={{ display: 'none' }}>
-                              {TYPE_ICONS[item.type] || '🍽️'}
+                              🍽️
                             </div>
                           </div>
                         ) : (
-                          <div className="detail-menu-icon">{TYPE_ICONS[item.type] || '🍽️'}</div>
+                          <div className="detail-menu-icon">🍽️</div>
                         )}
                         <div className="detail-menu-info">
                           <h4 className="detail-menu-name">{item.name}</h4>
                           {item.description && (
                             <p className="detail-menu-desc">{item.description}</p>
                           )}
-                          <span className="detail-menu-type">{item.type}</span>
                         </div>
                         <div className="detail-menu-price-tag">
                           ₹{item.price}
@@ -224,18 +196,7 @@ export default function RestaurantDetail() {
                     {restaurant.isOpen ? '🟢 Open' : '🔴 Closed'}
                   </span>
                 </div>
-                {restaurant.mealType?.length > 0 && (
-                  <div>
-                    <span className="text-gray-500 font-medium block mb-1.5">Serves</span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {restaurant.mealType.map(m => (
-                        <span key={m} className="bg-orange-50 text-orange-600 border border-orange-200 rounded-full px-3 py-0.5 text-xs font-semibold capitalize">
-                          {m === 'breakfast' ? '🌅' : m === 'lunch' ? '🍱' : '🌙'} {m}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+
                 <div className="pt-2">
                   <span className="text-gray-500 font-medium block mb-1">Address</span>
                   <span className="font-medium text-gray-700">📍 {restaurant.address}</span>

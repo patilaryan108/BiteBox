@@ -66,14 +66,14 @@ export default function ShopkeeperDashboard() {
   // Register shop form
   const [shopForm, setShopForm] = useState({
     name: '', address: '', priceRange: '', rating: '4.0', type: 'both',
-    mealType: ['lunch'], items: '', lat: '12.9716', lng: '77.5946',
+    items: '', lat: '12.9716', lng: '77.5946',
   });
   const [shopLoading, setShopLoading] = useState(false);
 
   // Add item form
   const [showAddItem, setShowAddItem] = useState(false);
   const [itemForm, setItemForm] = useState({
-    name: '', price: '', type: 'other', description: '', image: '',
+    name: '', price: '', description: '', image: '',
   });
   const [imgCompressing, setImgCompressing] = useState(false);
   const [itemLoading, setItemLoading] = useState(false);
@@ -129,7 +129,6 @@ export default function ShopkeeperDashboard() {
         priceRange: Number(shopForm.priceRange),
         rating: Number(shopForm.rating),
         type: shopForm.type,
-        mealType: shopForm.mealType,
         isOpen: true,
         items: shopForm.items.split(',').map(i => i.trim()).filter(Boolean),
         location: {
@@ -166,12 +165,11 @@ export default function ShopkeeperDashboard() {
       await authAxios().post(`/api/restaurants/${myShop._id}/menu`, {
         name: itemForm.name.trim(),
         price: Number(itemForm.price),
-        type: itemForm.type,
         description: itemForm.description.trim(),
         image: itemForm.image, // base64 or empty string
       });
       showMsg(`✅ "${itemForm.name}" added to your menu!`);
-      setItemForm({ name: '', price: '', type: 'other', description: '', image: '' });
+      setItemForm({ name: '', price: '', description: '', image: '' });
       if (fileInputRef.current) fileInputRef.current.value = '';
       setShowAddItem(false);
       fetchMyShop(myShop._id);
@@ -303,32 +301,7 @@ export default function ShopkeeperDashboard() {
                     <option value="both">Both</option>
                   </select>
                 </div>
-                <div className="auth-field" style={{ gridColumn: '1 / -1' }}>
-                  <label>Serves (select all that apply) *</label>
-                  <div className="sk-type-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                    {MEAL_OPTIONS.map(m => {
-                      const active = shopForm.mealType.includes(m.value);
-                      return (
-                        <button
-                          key={m.value}
-                          type="button"
-                          className={`sk-type-chip${active ? ' active' : ''}`}
-                          onClick={() => {
-                            const next = active
-                              ? shopForm.mealType.filter(v => v !== m.value)
-                              : [...shopForm.mealType, m.value];
-                            if (next.length > 0) setShopForm({ ...shopForm, mealType: next });
-                          }}
-                        >
-                          {m.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {shopForm.mealType.length === 0 && (
-                    <p style={{ color: '#f5a84a', fontSize: '0.78rem', marginTop: '6px' }}>⚠️ Select at least one meal type</p>
-                  )}
-                </div>
+
                 <div className="auth-field">
                   <label>Latitude</label>
                   <input type="number" step="any" value={shopForm.lat} onChange={e => setShopForm({ ...shopForm, lat: e.target.value })} required />
@@ -377,23 +350,7 @@ export default function ShopkeeperDashboard() {
                 </div>
               </div>
 
-              {/* Item type selector */}
-              <div className="auth-field">
-                <label>Item Category *</label>
-                <div className="sk-type-grid">
-                  {ITEM_TYPES.map(t => (
-                    <button
-                      key={t.value}
-                      type="button"
-                      id={`item-type-${t.value}`}
-                      className={`sk-type-chip${itemForm.type === t.value ? ' active' : ''}`}
-                      onClick={() => setItemForm({ ...itemForm, type: t.value })}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+
 
               <div className="auth-field">
                 <label>Description <span style={{ opacity: 0.45 }}>(optional)</span></label>
@@ -473,46 +430,38 @@ export default function ShopkeeperDashboard() {
             {loading ? (
               <div className="dashboard-loading">Loading menu…</div>
             ) : myShop.menu && myShop.menu.length > 0 ? (
-              Object.entries(groupedMenu).map(([type, items]) => (
-                <div key={type} className="sk-menu-group">
-                  <div className="sk-menu-group-title">
-                    {TYPE_ICONS[type]} {type.charAt(0).toUpperCase() + type.slice(1)}
-                    <span className="sk-menu-group-count">{items.length}</span>
+              <div className="sk-menu-items">
+                {(myShop.menu || []).map(item => (
+                  <div key={item._id} className="sk-menu-item">
+                    {/* Thumbnail */}
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="sk-menu-item-img"
+                        onError={e => { e.target.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="sk-menu-item-icon">🍽️</div>
+                    )}
+                    <div className="sk-menu-item-left">
+                      <div className="sk-menu-item-name">{item.name}</div>
+                      {item.description && (
+                        <div className="sk-menu-item-desc">{item.description}</div>
+                      )}
+                    </div>
+                    <div className="sk-menu-item-right">
+                      <div className="sk-menu-item-price">₹{item.price}</div>
+                      <button
+                        className="item-chip-del"
+                        style={{ fontSize: '1.3rem' }}
+                        onClick={() => handleDeleteItem(item._id)}
+                        title="Remove item"
+                      >×</button>
+                    </div>
                   </div>
-                  <div className="sk-menu-items">
-                    {items.map(item => (
-                      <div key={item._id} className="sk-menu-item">
-                        {/* Thumbnail */}
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="sk-menu-item-img"
-                            onError={e => { e.target.style.display = 'none'; }}
-                          />
-                        ) : (
-                          <div className="sk-menu-item-icon">{TYPE_ICONS[item.type] || '🍽️'}</div>
-                        )}
-                        <div className="sk-menu-item-left">
-                          <div className="sk-menu-item-name">{item.name}</div>
-                          {item.description && (
-                            <div className="sk-menu-item-desc">{item.description}</div>
-                          )}
-                        </div>
-                        <div className="sk-menu-item-right">
-                          <div className="sk-menu-item-price">₹{item.price}</div>
-                          <button
-                            className="item-chip-del"
-                            style={{ fontSize: '1.3rem' }}
-                            onClick={() => handleDeleteItem(item._id)}
-                            title="Remove item"
-                          >×</button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : (
               <div className="dashboard-empty-state">
                 <div className="empty-icon">🍽️</div>
