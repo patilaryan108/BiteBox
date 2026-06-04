@@ -5,8 +5,6 @@ const mongoose = require("mongoose"); // to connect to mongodb
 const cors = require("cors"); // to allow cross-origin requests from frontend
 const bodyParser = require("body-parser"); // to parse incoming JSON request bodies
 
-const { ShopsModel } = require("./models/ShopsModel");
-const { ItemsModel } = require("./models/ItemsModel");
 const restaurantRoutes = require("./routes/restaurantRoutes");
 const authRoutes = require("./routes/authRoutes");
 
@@ -361,15 +359,7 @@ app.use("/api/restaurants", restaurantRoutes);
 //     res.send("Items added");
 // })
 
-app.get("/allShopsModel", async (req, res) => {
-    let allShops = await ShopsModel.find({});
-    res.json(allShops);
-})
 
-app.get("/allItemsModel", async (req, res) => {
-    let allItems = await ItemsModel.find({});
-    res.json(allItems);
-})
 
 mongoose.connect(uri)
     .then(async () => {
