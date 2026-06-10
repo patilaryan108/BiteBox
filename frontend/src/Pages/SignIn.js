@@ -41,9 +41,9 @@ export default function SignIn() {
         <p className="auth-subtitle">Sign in to your BiteBox account</p>
 
         {/* Hint box for demo */}
-        <div className="auth-hint">
+        {/* <div className="auth-hint">
           <strong>Demo Admin:</strong> admin@bitebox.com / admin123
-        </div>
+        </div> */}
 
         {error && <div className="auth-error">{error}</div>}
 

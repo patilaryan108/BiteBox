@@ -109,7 +109,7 @@ exports.deleteRestaurant = async (req, res) => {
 // ─── Add rich menu item (shopkeeper/admin) ────────────────────────────────
 exports.addMenuItemToRestaurant = async (req, res) => {
   try {
-    const { name, price, description, image } = req.body;
+    const { name, price, description, image, type } = req.body;
 
     if (!name || price === undefined) {
       return res.status(400).json({ success: false, error: "Item name and price are required" });
@@ -124,6 +124,7 @@ exports.addMenuItemToRestaurant = async (req, res) => {
             price: Number(price),
             description: description || "",
             image: image || "",
+            type: type || "lunch",
           },
         },
         $addToSet: { items: name },

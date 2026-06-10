@@ -43,6 +43,17 @@ function Hero() {
                   </button>
                   {dropdownOpen && (
                     <div className="bb-nav-dropdown">
+                      {(user.role === 'admin' || user.role === 'shopkeeper') && (
+                        <button 
+                          className="bb-nav-dropdown-item" 
+                          onClick={() => { 
+                            navigate(user.role === 'admin' ? '/admin' : '/shopkeeper'); 
+                            setDropdownOpen(false); 
+                          }}
+                        >
+                          Dashboard
+                        </button>
+                      )}
                       <button className="bb-nav-dropdown-item" onClick={() => { logout(); setDropdownOpen(false); }}>
                         Sign Out
                       </button>

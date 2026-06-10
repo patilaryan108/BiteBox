@@ -3698,7 +3698,7 @@ img {
 ══════════════════════════════════════════════ */
 .bb-dishes-section {
   background: var(--bb-cream);
-  padding: 100px 0 90px;
+  padding: 100px 0 0px 0px;
 }
 
 .bb-dishes-container {

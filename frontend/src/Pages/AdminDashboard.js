@@ -81,7 +81,6 @@ export default function AdminDashboard() {
   const [imgComp,    setImgComp]      = useState({});
 
   // ── Show-Items tab ───────────────────────────────────────────────────────
-  const [showFilter, setShowFilter] = useState('all');   // 'all' | category value
   const [toggling,   setToggling]   = useState({});      // itemId -> bool (loading)
 
   // ── Fetch ────────────────────────────────────────────────────────────────
@@ -100,9 +99,7 @@ export default function AdminDashboard() {
     (r.menu || []).map(m => ({ ...m, shopName: r.name, shopId: r._id }))
   );
 
-  const filteredItems = showFilter === 'all'
-    ? allItems
-    : allItems.filter(i => i.type === showFilter);
+  const filteredItems = allItems;
 
   // ── Actions ──────────────────────────────────────────────────────────────
   const handleDelete = async (id) => {
@@ -261,13 +258,10 @@ export default function AdminDashboard() {
                 <strong style={{ color: '#f1c40f' }}>Homepage Control</strong>
                 <p style={{ margin: '4px 0 0', fontSize: '0.85rem', opacity: 0.8 }}>
                   Toggle the <strong>⭐ Feature</strong> button on any item to immediately show or hide it
-                  on the homepage <strong>Lunch</strong>, <strong>Vegetables</strong>, and <strong>Dairy</strong> sections.
+                  on the homepage.
                 </p>
               </div>
             </div>
-
-            {/* Category filter tabs */}
-            <div style={{ marginBottom: 12 }}></div>
 
             {/* Items grid or empty */}
             {loading ? (
@@ -285,7 +279,6 @@ export default function AdminDashboard() {
                 gap: 16,
               }}>
                 {filteredItems.map(item => {
-                  const cat = catMap['other'];
                   const isFeatured = !!item.featured;
                   const isToggling = toggling[item._id];
                   return (

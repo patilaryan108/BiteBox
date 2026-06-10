@@ -6,6 +6,7 @@ const menuItemSchema = new mongoose.Schema({
   description: { type: String, default: "", trim: true },
   image: { type: String, default: "" }, // URL or base64 image
   featured: { type: Boolean, default: false }, // show on homepage hero sections
+  type: { type: String, default: "lunch" },
 });
 
 const restaurantSchema = new mongoose.Schema(

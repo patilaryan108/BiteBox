@@ -48,9 +48,6 @@ function Navbar() {
       <ul className="bb-navbar__links">
         <li><Link to="/">Home</Link></li>
         <li><a href="#about">About</a></li>
-        <li><a href="#lunch">Lunch</a></li>
-        <li><a href="#dairy">Dairy</a></li>
-        <li><a href="#veggies">Vegetables</a></li>
       </ul>
 
       {/* Right side Actions */}

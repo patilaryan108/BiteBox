@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const dishes = [
+const defaultDishes = [
   {
     img: '/media/signature_ramen.png',
     name: 'Signature Ramen',
@@ -55,6 +55,28 @@ function StarRating({ rating }) {
 
 function Lunch() {
   const navigate = useNavigate();
+  const [lunchDishes, setLunchDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const res = await fetch('http://localhost:3001/api/restaurants/featured/all');
+        const data = await res.json();
+        if (data.success && data.data) {
+          setLunchDishes(data.data);
+        }
+      } catch (e) {
+        console.error('Failed to fetch featured items:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeatured();
+  }, []);
+
+  // Use dynamic dishes if present, otherwise default to static
+  const displayDishes = lunchDishes.length > 0 ? lunchDishes : defaultDishes;
 
   return (
     <section className="bb-dishes-section" id="dishes">
@@ -68,27 +90,47 @@ function Lunch() {
         </div>
 
         <div className="bb-dishes-grid">
-          {dishes.map((dish, i) => (
-            <div className="bb-dish-card" key={i}>
-              <div className="bb-dish-img-wrap">
-                <img src={dish.img} alt={dish.name} className="bb-dish-img" />
-              </div>
-              <div className="bb-dish-body">
-                <h3 className="bb-dish-name">{dish.name}</h3>
-                <p className="bb-dish-restaurant">{dish.restaurant}</p>
-                <div className="bb-dish-meta">
-                  <StarRating rating={dish.stars} />
-                  <span className="bb-dish-price">{dish.price}</span>
+          {displayDishes.map((dish, i) => {
+            const isDynamic = !!dish._id;
+            const priceText = isDynamic ? `₹${dish.price}` : dish.price;
+            const imgUrl = isDynamic ? (dish.image || '/media/signature_ramen.png') : dish.img;
+            const restName = isDynamic ? dish.shopName : dish.restaurant;
+            const ratingVal = isDynamic ? (dish.stars || 4.5) : dish.stars;
+            const onClickHandler = () => {
+              if (isDynamic && dish.shopId) {
+                navigate(`/restaurant/${dish.shopId}`);
+              } else {
+                navigate(`/search?query=${encodeURIComponent(dish.query || dish.name)}`);
+              }
+            };
+
+            return (
+              <div className="bb-dish-card" key={dish._id || i}>
+                <div className="bb-dish-img-wrap">
+                  <img
+                    src={imgUrl}
+                    alt={dish.name}
+                    className="bb-dish-img"
+                    onError={(e) => { e.target.src = '/media/signature_ramen.png'; }}
+                  />
                 </div>
-                <button
-                  className="bb-dish-btn"
-                  onClick={() => navigate(`/search?query=${encodeURIComponent(dish.query)}`)}
-                >
-                  View Details
-                </button>
+                <div className="bb-dish-body">
+                  <h3 className="bb-dish-name">{dish.name}</h3>
+                  <p className="bb-dish-restaurant">{restName}</p>
+                  <div className="bb-dish-meta">
+                    <StarRating rating={ratingVal} />
+                    <span className="bb-dish-price">{priceText}</span>
+                  </div>
+                  <button
+                    className="bb-dish-btn"
+                    onClick={onClickHandler}
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
