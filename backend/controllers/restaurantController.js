@@ -109,7 +109,7 @@ exports.deleteRestaurant = async (req, res) => {
 // ─── Add rich menu item (shopkeeper/admin) ────────────────────────────────
 exports.addMenuItemToRestaurant = async (req, res) => {
   try {
-    const { name, price, description, image, type } = req.body;
+    const { name, price, description, image, type, available } = req.body;
 
     if (!name || price === undefined) {
       return res.status(400).json({ success: false, error: "Item name and price are required" });
@@ -124,6 +124,7 @@ exports.addMenuItemToRestaurant = async (req, res) => {
             price: Number(price),
             description: description || "",
             image: image || "",
+            available: available !== undefined ? !!available : true,
             type: type || "lunch",
           },
         },
@@ -200,6 +201,34 @@ exports.deleteItemFromRestaurant = async (req, res) => {
 
     res.json({ success: true, data: restaurant });
   } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// ─── Set availability for a menu item (shopkeeper/admin) ──────────────────
+exports.setMenuItemAvailability = async (req, res) => {
+  try {
+    const { available } = req.body;
+    if (available === undefined) {
+      return res.status(400).json({ success: false, error: "'available' boolean is required in body" });
+    }
+
+    const restaurant = await Restaurant.findById(req.params.id);
+    if (!restaurant) {
+      return res.status(404).json({ success: false, error: "Restaurant not found" });
+    }
+
+    const menuItem = restaurant.menu.id(req.params.itemId);
+    if (!menuItem) {
+      return res.status(404).json({ success: false, error: "Menu item not found" });
+    }
+
+    menuItem.available = !!available;
+    await restaurant.save();
+
+    res.json({ success: true, available: menuItem.available, data: restaurant });
+  } catch (error) {
+    console.error("Error setting menu item availability:", error);
     res.status(400).json({ success: false, error: error.message });
   }
 };
