@@ -11,6 +11,7 @@ const {
   getAllRestaurants,
   toggleMenuItemFeatured,
   getFeaturedItems,
+  setMenuItemAvailability,
 } = require("../controllers/restaurantController");
 const { verifyToken, requireRole } = require("../middleware/auth");
 const reviewRoutes = require("./reviewRoutes");
@@ -47,6 +48,14 @@ router.delete(
   verifyToken,
   requireRole("shopkeeper", "admin"),
   deleteMenuItemFromRestaurant
+);
+
+// Allow shopkeepers and admins to set an item's availability
+router.patch(
+  "/:id/menu/:itemId/availability",
+  verifyToken,
+  requireRole("shopkeeper", "admin"),
+  setMenuItemAvailability
 );
 
 // ADMIN: Toggle featured flag on a menu item (shows/hides on homepage)
