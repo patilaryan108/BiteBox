@@ -13,6 +13,7 @@ const {
   getFeaturedItems,
 } = require("../controllers/restaurantController");
 const { verifyToken, requireRole } = require("../middleware/auth");
+const reviewRoutes = require("./reviewRoutes");
 
 const router = express.Router();
 
@@ -33,10 +34,20 @@ router.delete("/:id", verifyToken, requireRole("admin"), deleteRestaurant);
 
 // ─── Rich menu item routes (shopkeeper/admin) ─────────────────────────────
 // Add a rich menu item (with price, type, description)
-router.post("/:id/menu", verifyToken, requireRole("shopkeeper", "admin"), addMenuItemToRestaurant);
+router.post(
+  "/:id/menu",
+  verifyToken,
+  requireRole("shopkeeper", "admin"),
+  addMenuItemToRestaurant
+);
 
 // Delete a rich menu item by its Mongoose _id
-router.delete("/:id/menu/:itemId", verifyToken, requireRole("shopkeeper", "admin"), deleteMenuItemFromRestaurant);
+router.delete(
+  "/:id/menu/:itemId",
+  verifyToken,
+  requireRole("shopkeeper", "admin"),
+  deleteMenuItemFromRestaurant
+);
 
 // ADMIN: Toggle featured flag on a menu item (shows/hides on homepage)
 router.patch("/:id/menu/:itemId/featured", verifyToken, requireRole("admin"), toggleMenuItemFeatured);
@@ -47,5 +58,8 @@ router.get("/featured/all", getFeaturedItems);
 // ─── Legacy string item routes (admin quick-add) ──────────────────────────
 router.post("/:id/items", verifyToken, requireRole("shopkeeper", "admin"), addItemToRestaurant);
 router.delete("/:id/items/:itemName", verifyToken, requireRole("shopkeeper", "admin"), deleteItemFromRestaurant);
+
+// Mount review router (handles /:id/reviews/...)
+router.use('/:id/reviews', reviewRoutes);
 
 module.exports = router;

@@ -9,6 +9,8 @@ const menuItemSchema = new mongoose.Schema({
   type: { type: String, default: "lunch" },
 });
 
+const reviewSchema = require("./Review");
+
 const restaurantSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
@@ -25,13 +27,7 @@ const restaurantSchema = new mongoose.Schema(
     rating: { type: Number, default: 0, min: 0, max: 5 },
     isOpen: { type: Boolean, default: true },
     type: { type: String, enum: ["veg", "non-veg", "both"], default: "both" },
-    reviews: [
-      {
-        user: { type: String, required: true },
-        comment: { type: String },
-        rating: { type: Number, min: 0, max: 5 },
-      },
-    ],
+    reviews: { type: [reviewSchema], default: [] },
   },
   { timestamps: true }
 );
