@@ -6,6 +6,7 @@ const menuItemSchema = new mongoose.Schema({
   description: { type: String, default: "", trim: true },
   image: { type: String, default: "" }, // URL or base64 image
   featured: { type: Boolean, default: false }, // show on homepage hero sections
+  available: { type: Boolean, default: true }, // whether the item is currently available
   type: { type: String, default: "lunch" },
 });
 
